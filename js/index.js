@@ -2,8 +2,8 @@ const http = require('http');
 const request = require('request');
 const URL = 'https://auto.ria.com/uk/legkovie/tesla/?page=1';
 let str = '';
-const elements = []; 
-let element = '';
+const blockCars = []; 
+let blockCar = '';
 const arrPropertyCar = []; 
 
 // const server = http.createServer((req, res) => {
@@ -24,30 +24,29 @@ const arrPropertyCar = [];
     };
     getHTMLCars(body);
 
-    const cutElementsCar = (string) => {
-      let elementStart = string.indexOf('<section class="ticket-item "');
-      let elementEnd = string.indexOf('<i class="icon-favorite-head"></i> </a> </div> </div> </div> </div> </section>');
+    const cutStringBlockCar = (string) => {
+      let stringStart = string.indexOf('<section class="ticket-item "');
+      let stringEnd = string.indexOf('<i class="icon-favorite-head"></i> </a> </div> </div> </div> </div> </section>');
       let newString = string;
     
-      while (elementStart > 0) {
-
-        element = newString.slice(elementStart, elementEnd);
-        elements.push(element);
-        newString = newString.slice(elementEnd + 1);
-        elementStart = newString.indexOf('<section class="ticket-item "');
-        elementEnd = newString.indexOf('<i class="icon-favorite-head"></i> </a> </div> </div> </div> </div> </section>');
+      while (stringStart > 0) {
+        blockCar = newString.slice(stringStart, stringEnd);
+        blockCars.push(blockCar);
+        newString = newString.slice(stringEnd + 1);
+        stringStart = newString.indexOf('<section class="ticket-item "');
+        stringEnd = newString.indexOf('<i class="icon-favorite-head"></i> </a> </div> </div> </div> </div> </section>');
       }
     }
-    cutElementsCar(str);
-    // console.log(elements);
+    cutStringBlockCar(str);
+    // console.log(blockCars);
 
     arrPropertyCar.forEach((property) => {
       let model = property.split('<span class="blue bold">').pop().split('</span>')
       let year = property.split('</span>').pop().split('</a>')
       let priceUSD = property.split('data-currency="USD">').pop().split('</span>')
       let priceUAH = property.split('<span data-currency="UAH">').pop().split('</span>')
-     });
-
+    });
+     console.log(arrPropertyCar.model);
   });
 
     // res.write(`<tr><td>${model}</td><td>${year}</td><td>${priceUSD}</td><td>${priceUAH}</td></tr>`);
