@@ -4,7 +4,7 @@ const URL = 'https://auto.ria.com/uk/legkovie/tesla/?page=1';
 let str = '';
 const blockCars = []; 
 let blockCar = '';
-const arrPropertyCar = []; 
+const arrCarInfo = []; 
 
 // const server = http.createServer((req, res) => {
 
@@ -15,7 +15,7 @@ const arrPropertyCar = [];
 
     const getHTMLCars = (HTMLBody) => {
       const startStr = HTMLBody.indexOf('<div id="searchResults">');
-      const endStr = HTMLBody.indexOf('<div class="infiltrate fl-l popup-filter"');
+      const endStr = HTMLBody.indexOf('<section class="social-sharing m-padding">');
 
       for (let i = startStr; i < endStr; i++) {
         str = `${str}${HTMLBody[i]}`
@@ -40,19 +40,33 @@ const arrPropertyCar = [];
     cutStringBlockCar(str);
     // console.log(blockCars);
 
-    arrPropertyCar.forEach((property) => {
+    blockCars.forEach((property) => {
       let model = property.split('<span class="blue bold">').pop().split('</span>')
-      let year = property.split('</span>').pop().split('</a>')
+      let year = property.split('data-year="').pop().split('" data-expire-date')
       let priceUSD = property.split('data-currency="USD">').pop().split('</span>')
       let priceUAH = property.split('<span data-currency="UAH">').pop().split('</span>')
+      
+      const propertyCar = {
+        model: model[0],
+        year: year[0],
+        priceUSD: priceUSD[0],
+        priceUAH: priceUAH[0],
+      } 
+      // console.log(propertyCar);
+      arrCarInfo.push(propertyCar);
     });
-     console.log(arrPropertyCar.model);
+     
+      // console.log(arrCarInfo);
+      console.table(arrCarInfo);
+      
   });
 
-    // res.write(`<tr><td>${model}</td><td>${year}</td><td>${priceUSD}</td><td>${priceUAH}</td></tr>`);
-    // res.end();
+//     res.write(``);
+//     res.end();
 // });
 
 // server.listen(5000, () => {
 //   console.log('Server listen >>>> 5000');
 // });
+
+
