@@ -18,6 +18,7 @@
   "author": "OK",
   "license": "ISC",
   "dependencies": {
+    "moment": "^2.29.1",
     "nodemon": "^2.0.14",
     "request": "^2.88.2"
   },
